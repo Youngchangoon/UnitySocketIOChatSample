@@ -1,0 +1,19 @@
+{
+  "name": "chatserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "pm2 start index.js",
+    "start2": "pm2 start processes.config.js"
+  },
+  "author": "kyc",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ioredis": "^4.0.1",
+    "socket.io": "^1.7.4",
+    "socket.io-redis": "^4.0.1"
+  }
+}
