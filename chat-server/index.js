@@ -19,9 +19,10 @@ http.listen(port, function () {
 io.on('connect', function (socket) {
     console.log('user connected: ' + socket.id);
 
+    socket.emit('connected');
+
     // 유저가 들어오면 room-global로 입장
     socket.join(room_global, function (err) {
-
         redis.lrange(room_global, 0, 50)
             .then(function (prevChatList) {
                 var historyList = [];

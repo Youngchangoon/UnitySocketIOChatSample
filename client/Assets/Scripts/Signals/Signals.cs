@@ -6,4 +6,14 @@ namespace Signals
     {
         public ChatData recieveData;
     }
+
+    public class SocketSuccessSignal
+    {
+        
+    }
+
+    public class SocketFailSignal
+    {
+        
+    }
 }

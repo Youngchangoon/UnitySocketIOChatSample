@@ -13,14 +13,7 @@ namespace Chat
 
         [Inject] private ChatService _chatService;
 
-        private List<ChatObject> _chatObjectList;
-        private string _randomNickname = "가명_";
-
-        void Start()
-        {
-            _randomNickname += Random.Range(0, 99999).ToString();
-            _chatObjectList = new List<ChatObject>();
-        }
+        private List<ChatObject> _chatObjectList = new List<ChatObject>();
 
         public void AddChatObject(ChatData chatData)
         {
@@ -45,7 +38,8 @@ namespace Chat
         
         public void OnPressedSendButton()
         {
-            _chatService.Send(new ChatData {nickname = _randomNickname, message = inputField.text});
+            _chatService.Send(new ChatData {message = inputField.text});
+            inputField.text = string.Empty;
         }
     }
 }

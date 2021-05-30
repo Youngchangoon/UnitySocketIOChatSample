@@ -12,7 +12,7 @@ namespace Chat
         global,
     }
     
-    public class BackEndChatService : IInitializable
+    public class ChatServerService : IInitializable
     {
         private string IP = "127.0.0.1";
         private string PORT = "3000";
@@ -27,12 +27,17 @@ namespace Chat
         {
             _socket = new SocketIO(url);
             _socket.OnOpen += () => Debug.Log("SOCKET OPEN!");
-            _socket.OnError += ex => Debug.Log("er: " + ex);
-            _socket.On("connect", ev =>
+            _socket.OnError += ex =>
+            {
+                Debug.Log("er: " + ex);
+                _signalBus.Fire<SocketFailSignal>();
+            };
+            _socket.On("connected", ev =>
             {
                 Debug.Log("CONNECT!!");
+                _signalBus.Fire<SocketSuccessSignal>();
             });
-            
+
             _socket.On("receive history", message =>
             {
                 var chatDataArray = JsonConvert.DeserializeObject<ChatData[]>(message.Data[0].ToString());
@@ -46,7 +51,13 @@ namespace Chat
                 var chatData = JsonConvert.DeserializeObject<ChatData>(message.Data[0].ToString());
                 _signalBus.Fire(new MessageSignal {recieveData = chatData});
             });
-
+        }
+        
+        public void Connect()
+        {
+            if (_socket.IsAlive)
+                return;
+            
             _socket.Connect();
         }
 

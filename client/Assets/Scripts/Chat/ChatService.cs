@@ -1,15 +1,18 @@
 ﻿using Signals;
 using UniRx;
+using UnityEngine;
 using Zenject;
 
 namespace Chat
 {
     public class ChatService : IInitializable
     {
-        [Inject] private BackEndChatService _backendChatService;
+        [Inject] private ChatServerService _backendChatServerService;
         [Inject] private ChatModel _chatModel;
         [Inject] private ChatView _chatView;
         [Inject] private SignalBus _signalBus;
+        
+        public string UserNickname { get; set; }
 
         private ReactiveCollection<ChatData> _chatList;
         private int _chatCountLimit = 10;
@@ -26,7 +29,9 @@ namespace Chat
 
         public void Send(ChatData chatData)
         {
-            _backendChatService.SendMessage(chatData);
+            chatData.nickname = UserNickname;
+            
+            _backendChatServerService.SendMessage(chatData);
         }
 
         private void ReceiveMessageFromServer(ChatData newChat)
